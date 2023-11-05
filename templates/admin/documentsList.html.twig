@@ -1,0 +1,111 @@
+{% extends '@!EasyAdmin/layout.html.twig' %}
+
+{% block main %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 m-auto" style="padding: 25px;">
+                    <div class="row" style="justify-content: space-between;">
+                        <div class="col-lg-5" style="float: left;">
+                            <h4>Список документов:</h4>
+                            <hr style="color: #e3e3e3">
+                            <table class="table table-striped">
+                                {% for key, file in files|reverse %}
+                                    <tr>
+                                        <td style="justify-content: space-between;">
+                                            Номер запроса: {{ file.id }} <br>
+                                            <a href="{{ app.request.getBaseURL() }}/{{ key }}">Скачать отчет</a><br>
+                                            Текст запроса: <i>{{ file.searchText }}</i> <br>
+                                            {% if file.industry is not empty %}
+                                                Отрасль:<br>
+                                                {% for id in file.industry %}
+                                                    &nbsp;{{ industriesName[id] }} <br>
+                                                {% endfor %}
+                                            {% endif %}
+                                            {% if file.searchFields is not empty %}
+                                                Поля запроса:
+                                                {% for field in file.searchFields %}
+                                                    <span class="badge badge-info">{{ searchFieldsName[field] }}</span>
+                                                {% endfor %}
+                                                <br>
+                                            {% endif %}
+                                            {% if file.allregion %}
+                                                <i>Запрос по всем регионам</i>
+                                            {% else %}
+                                                Регион запроса: <i>{{ regionNames[file.regionId] }}</i>
+                                            {% endif %}
+                                            <br>
+                                            Время запроса:
+                                            <i>{{ file.requestTime|date('Y-m-d H:i:s', 'Asia/Yekaterinburg') }}</i>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        <div class="col-lg-5" style="float: right;">
+                            <h4>Список запросов в обработке:</h4>
+                            <hr style="color: #e3e3e3">
+                            <table class="table table-striped">
+                                {% for key, file in queries|reverse %}
+                                    <tr>
+                                        <td>
+                                            {% if file.ready == false %}
+                                                Номер запроса: {{ file.id }} <br>
+                                                Текст запроса: <i>{{ file.searchText }}</i> <br>
+                                                {% if file.industry is not empty %}
+                                                    Отрасль:<br>
+                                                    {% for id in file.industry %}
+                                                        &nbsp;{{ industriesName[id] }} <br>
+                                                    {% endfor %}
+                                                {% endif %}
+                                                {% if file.searchFields is not empty %}
+                                                    Поля запроса:
+                                                    {% for field in file.searchFields %}
+                                                        <span class="badge badge-info">{{ searchFieldsName[field] }}</span>
+                                                    {% endfor %}
+                                                    <br>
+                                                {% endif %}
+                                                {% if file.allregion %}
+                                                    <i>Запрос по всем регионам</i>
+                                                {% else %}
+                                                    Регион запроса: <i>{{ regionNames[file.regionId] }}</i>
+                                                {% endif %}
+                                                <br>
+                                                Время запроса:
+                                                <i>{{ file.requestTime|date('Y-m-d H:i:s', 'Asia/Yekaterinburg') }}</i>
+                                                <br>
+                                                {% if file.failed == true %}
+                                                    <span class="badge badge-danger">Произошла ошибка при выполнении запроса</span>
+                                                {% else %}
+                                                    <span class="badge badge-warning">Выполняется</span>
+                                                {% endif %}
+                                            {% else %}
+                                                Номер запроса: {{ file.id }} <br>
+                                                Текст запроса: <i>{{ file.searchText }}</i> <br>
+                                                {% if file.searchFields is not empty %}
+                                                    Поля запроса:
+                                                    {% for field in file.searchFields %}
+                                                        <span class="badge badge-info">{{ searchFieldsName[field] }}</span>
+                                                    {% endfor %}
+                                                    <br>
+                                                {% endif %}
+                                                {% if file.industry is not empty %}
+                                                    Отрасль:<br>
+                                                    {% for id in file.industry %}
+                                                        &nbsp;{{ industriesName[id] }} <br>
+                                                    {% endfor %}
+                                                {% endif %}
+                                                <span class="badge badge-success">Запрос выполнен</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+    </section>
+
+{% endblock main %}

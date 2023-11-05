@@ -1,0 +1,94 @@
+{% extends '@!EasyAdmin/layout.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/easyadmin/css/easyadmin.min.css') }}">
+{% endblock %}
+{% block main %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 m-auto">
+                    {{ form_start(form, {'action': path('parseVacancies'), 'method': 'POST'}) }}
+                    {{ form_errors(form) }}
+                    <div class="card-body">
+
+                        <div class="form-group">
+                            {{ form_label(form.searchText) }}
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    {{ form_widget(form.searchText, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_errors(form.searchText, {'attr': {'class': 'error-message'}}) }}
+                                    {{ form_help(form.searchText) }}
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            {{ form_label(form.regionId) }}
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    {{ form_widget(form.regionId, {'attr': {'class': 'form-control form-select'}}) }}
+                                    {{ form_errors(form.regionId, {'attr': {'class': 'error-message'}}) }}
+                                    {{ form_help(form.regionId) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.search_field) }} <br>
+                            {% for choice in form.search_field %}
+                                {{ form_widget(choice) }} {{ form_label(choice) }}<br>
+                            {% endfor %}
+                        </div>
+
+                        <button onclick="toggleSpoiler()" class="btn btn-primary" type="button">Список индустрий</button>
+                        <div id="spoiler" style="display: none; text-align: justify; padding: 20px">
+                            <div class="form-group">
+                                {{ form_label(form.industry) }} <br>
+                                {% for choice in form.industry %}
+                                    {{ form_widget(choice) }} {{ form_label(choice) }}<br>
+                                {% endfor %}
+                            </div>
+                            <hr style="width: 40%">
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(form.onlyWithSalary) }}
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    {{ form_widget(form.onlyWithSalary, {'attr': {'class': 'form-control form-select'}}) }}
+                                    {{ form_errors(form.onlyWithSalary, {'attr': {'class': 'error-message'}}) }}
+                                    {{ form_help(form.onlyWithSalary) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    {{ form_widget(form.allRegion, {'attr': {'class': 'form-check-input'}}) }}
+                                    {{ form_label(form.allRegion) }}
+                                    {{ form_errors(form.allRegion, {'attr': {'class': 'error-message'}}) }}
+                                    {{ form_help(form.allRegion) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Поиск</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+    </section>
+    <script>
+        function toggleSpoiler() {
+            var div = document.getElementById("spoiler");
+            if (div.style.display === "none") {
+                div.style.display = "block";
+            } else {
+                div.style.display = "none";
+            }
+        }
+    </script>
+{% endblock main %}

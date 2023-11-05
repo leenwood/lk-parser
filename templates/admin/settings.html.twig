@@ -1,0 +1,36 @@
+{% extends '@!EasyAdmin/layout.html.twig' %}
+
+{% block main %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 m-auto">
+                    {{ form_errors(form) }}
+                    <div class="card card-primary" style="">
+                        {{ form_start(form, {'action': path('settingsUpdate', {'method': "POST"})}) }}
+                        <div class="card-body">
+                            <br/>
+                            <h2>Настройки вебхуков</h2>
+                            <div class="form-group" style="">
+                                {{ form_label(form.apiKey) }}
+                                <div class="row">
+                                    <div class="col-lg-7" style="">
+                                        {{ form_widget(form.apiKey, {'attr': {'class': 'form-control'}}) }}
+                                        {{ form_errors(form.apiKey, {'attr': {'class': 'error-message'}}) }}
+                                    </div>
+                                    <div class="col-lg-5"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock main %}
