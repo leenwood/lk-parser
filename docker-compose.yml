@@ -13,6 +13,4 @@ services:
     volumes:
       - ./application/backend:/symfony
     container_name: ${PROJECT_NAME}-php-fpm
-    depends_on:
-      - postgres
     working_dir: /symfony
