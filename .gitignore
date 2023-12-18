@@ -19,6 +19,7 @@
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 
+/.idea
 /.idea/.gitignore
 /.idea/backend.iml
 /.idea/codeception.xml
