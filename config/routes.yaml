@@ -1,5 +1,11 @@
 controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
+    resource: ../src/Controller/
+    type: annotation
+
+kernel:
+    resource: ../src/Kernel.php
+    type: annotation
+
+app_agreeable_puppy:
+    path: /agreeable/puppy
+    controller: App\Controller\AgreeablePuppyController::index
