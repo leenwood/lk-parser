@@ -19,24 +19,24 @@ class ParserVacanciesQueueHandler
     }
 
     public function __invoke(
-        ParserVacanciesQueueCommand $command
+        ParserVacanciesQueueRequest $request
     ): void
     {
         $query = new VacanciesParseQuery();
         $query->setRequestTime(time());
-        $query->setSearchText($command->searchText);
-        $query->setRegionId($command->regionId);
-        $query->setAllRegion($command->allRegion);
-        $query->setIndustries($command->industries);
-        $query->setSearchFields($command->searchFields);
+        $query->setSearchText($request->searchText);
+        $query->setRegionId($request->regionId);
+        $query->setAllRegion($request->allRegion);
+        $query->setIndustries($request->industries);
+        $query->setSearchFields($request->searchFields);
         $query->setReady(false);
         $query->setFailed(false);
-        $query->setOnlyWithSalary($command->onlyWithSalary);
+        $query->setOnlyWithSalary($request->onlyWithSalary);
         $this->repository->save($query);
         $this->messageBus->dispatch(new ParserQueryMessage(
-            $command->searchText,
-            $command->regionId,
-            $command->allRegion,
+            $request->searchText,
+            $request->regionId,
+            $request->allRegion,
             $query
         ));
     }

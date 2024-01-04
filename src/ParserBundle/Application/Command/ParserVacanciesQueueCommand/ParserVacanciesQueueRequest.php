@@ -4,7 +4,7 @@ namespace App\ParserBundle\Application\Command\ParserVacanciesQueueCommand;
 
 use Spatie\DataTransferObject\DataTransferObject;
 
-class ParserVacanciesQueueCommand extends DataTransferObject
+class ParserVacanciesQueueRequest extends DataTransferObject
 {
 
     public string $searchText;

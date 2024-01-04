@@ -12,8 +12,8 @@ class SearchFieldNameEnum
     public const DESCRIPTION = 'description';
 
     public const FIELD_NAME = [
-        self::NAME => 'Поиск в название',
-        self::COMPANY_NAME => 'Поиск в название компании',
+        self::NAME => 'Поиск в названии',
+        self::COMPANY_NAME => 'Поиск в названии компании',
         self::DESCRIPTION => 'Поиск в описании вакансии',
     ];
 

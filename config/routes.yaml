@@ -1,11 +1,9 @@
 controllers:
-    resource: ../src/Controller/
-    type: annotation
+    resource:
+        path: ../src/ApiBundle/Controller/
+        namespace: App\ApiBundle\Controller
+    type: attribute
 
 kernel:
     resource: ../src/Kernel.php
     type: annotation
-
-app_agreeable_puppy:
-    path: /agreeable/puppy
-    controller: App\Controller\AgreeablePuppyController::index
