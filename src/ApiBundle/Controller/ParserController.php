@@ -2,47 +2,76 @@
 
 namespace App\ApiBundle\Controller;
 
-use App\ParserBundle\Application\Queue\ParserQueryMessage;
-use App\ParserBundle\Domain\Entity\VacanciesParseQuery;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\ApiBundle\RequestObject\BaseParseRequestObject;
+use App\ParserBundle\Application\Command\ParserVacanciesQueueCommand\ParserVacanciesQueueCommand;
+use App\ParserBundle\Application\Command\ParserVacanciesQueueCommand\ParserVacanciesQueueHandler;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\RequestParam;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ParserController extends AbstractController
+class ParserController extends AbstractFOSRestController
 {
-    #[Route('/api/parse/region', name: 'simple request', methods: 'POST')]
-    public function index(
-        Request $request,
-        MessageBusInterface $messageBus
-    ): Response
+    public function __construct(
+        private LoggerInterface $logger
+    )
     {
-        $form = $request->getPayload()->all();
-
-        $query = new VacanciesParseQuery();
-        $query->setRequestTime(time());
-        $query->setSearchText($form['searchText']);
-        $query->setRegionId($form['regionId']);
-        $query->setAllRegion($form['allRegion']);
-        $query->setSearchFields($form['search_field']);
-        $query->setReady(false);
-        $query->setFailed(false);
-        $query->setOnlyWithSalary($form['onlyWithSalary']);
-        $messageBus->dispatch(new ParserQueryMessage(
-            $form['searchText'],
-            $form['regionId'],
-            $form['allRegion'],
-            $query
-        ));
-
-        return new JsonResponse(
-            ['status'=> Response::HTTP_OK]
-        );
     }
 
-    #[Route('/api/test', name: 'test', methods: 'GET')]
+
+    /**
+     *
+     * @ParamConverter("requestObject", class="App\ApiBundle\RequestObject", converter="fos_rest.request_body")
+     *
+     * @param Request $request
+     * @param ParserVacanciesQueueHandler $parserVacanciesQueueHandler
+     * @param BaseParseRequestObject $requestObject
+     * @return Response
+     */
+    #[Post(path: '/api/parse/start', name: 'Base Parsing')]
+    public function startParseVacancies(
+        Request $request,
+        ParserVacanciesQueueHandler $parserVacanciesQueueHandler,
+        BaseParseRequestObject $requestObject
+    ): Response
+    {
+        dd($requestObject);
+        try {
+            ($parserVacanciesQueueHandler)(new ParserVacanciesQueueCommand([
+                'searchText' => $request->request->getString('searchText'),
+                'regionId' => $request->request->getInt('regionId'),
+                'allRegion' => $request->request->getBoolean('allRegion'),
+                'searchFields' => json_decode($request->request->getString('searchField'), true),
+                'industries' => json_decode($request->request->getString('industries'), true)
+            ]));
+        } catch (\Throwable $e) {
+            $this->logger->error(sprintf("BaseParsingRequest-error | Request parameters: %s | Error text: %s",
+                json_encode([
+                    'searchText' => $request->request->getString('searchText'),
+                    'regionId' => $request->request->getInt('regionId'),
+                    'allRegion' => $request->request->getBoolean('allRegion'),
+                    'searchFields' => json_decode($request->request->getString('searchField'), true),
+                    'industries' => json_decode($request->request->getString('industries'), true)
+                ]),
+                $e
+            ));
+            dd($e);
+        }
+
+        return $this->handleView($this->view('ok'));
+    }
+
+    #[Route('/api/test', name: 'test_server', methods: 'GET')]
+    public function apiTest()
+    {
+        return new JsonResponse(['status' => Response::HTTP_OK]);
+    }
+
+    #[Route('/api/test_view', name: 'test', methods: 'GET')]
     public function test(
     ): Response
     {

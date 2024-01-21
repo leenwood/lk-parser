@@ -19,9 +19,10 @@ class ParserVacanciesQueueHandler
     }
 
     public function __invoke(
-        ParserVacanciesQueueRequest $request
+        ParserVacanciesQueueCommand $request
     ): void
     {
+        dd("parsing");
         $query = new VacanciesParseQuery();
         $query->setRequestTime(time());
         $query->setSearchText($request->searchText);
