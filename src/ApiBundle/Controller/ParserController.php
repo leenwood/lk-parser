@@ -39,7 +39,6 @@ class ParserController extends AbstractFOSRestController
         BaseParseRequestObject $requestObject
     ): Response
     {
-        dd($requestObject);
         try {
             ($parserVacanciesQueueHandler)(new ParserVacanciesQueueCommand([
                 'searchText' => $request->request->getString('searchText'),
